@@ -1,0 +1,6 @@
+## Setup
+
+1. Copy config.example.ts to config.ts
+2. Fill in your database credentials
+3. Run npm install
+4. Run npm run dev
