@@ -12,7 +12,7 @@
         "pm2:stop": "pm2 stop shorter"
     },
     "keywords": [],
-    "author": "",
+    "author": "wydios",
     "license": "ISC",
     "description": "",
     "dependencies": {

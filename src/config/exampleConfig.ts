@@ -13,6 +13,13 @@ export const config = {
     baseUrl: "",
 
     /**
+     * Access Token for Short API authentication.
+     * Required in body when creating a short link.
+     * Keep this secret!
+     */
+    accessToken: "",
+
+    /**
      * Database connection configuration.
      */
     database: {
