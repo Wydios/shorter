@@ -51,7 +51,7 @@ export async function handleCreate(req: Request, res: Response) {
     return res.json({
         error: false,
         code,
-        shortUrl: `${config.baseUrl}${code}`,
+        shortUrl: `${config.baseUrl}/${code}`,
         expires
     });
 };
