@@ -7,7 +7,7 @@
         "dev": "tsx watch src/index.ts",
         "build": "tsc",
         "start": "node dist/index.js",
-        "pm2:start": "pm2 start dist/index.js --name shorter",
+        "pm2:start": "pm2 start src/index.ts --name shorter --interpreter tsx",
         "pm2:restart": "pm2 restart shorter",
         "pm2:stop": "pm2 stop shorter"
     },
