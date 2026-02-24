@@ -30,5 +30,11 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
         });
     };
 
-    return res.redirect(entry);
+    let target = entry.trim();
+
+    if (!/^https?:\/\//i.test(target)) {
+        target = "https://" + target;
+    }
+
+    return res.redirect(target);
 };
