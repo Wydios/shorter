@@ -25,7 +25,7 @@ export class Short {
         this.app.get("/", (req, res) => {
             res.json({
                 error: false,
-                message: `To open a short link, visit: ${config.baseUrl}<code>`
+                message: `To open a short link, visit: ${config.baseUrl}/<code>`
             });
         });
 
