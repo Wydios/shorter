@@ -50,33 +50,25 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Wydiso • Short</title>
-            <meta property="og:site_name" content="Wydiso Shorter">
+            <meta name="description" content="Coding projects, web tools and developer experiments."/>
+            <meta name="robots" content="index, follow"/>
+            <meta name="googlebot" content="index, follow, max-image-preview:large"/>
             <meta property="og:title" content="Wydios • Preview">
             <meta property="og:description" content="Coding projects, web tools and developer experiments.">
-            <meta property="og:type" content="website">
             <meta property="og:image" content="${targetPreview}">
             <meta property="og:image:width" content="1200">
             <meta property="og:image:height" content="630">
-            ${isGif ? `
-                <meta property="og:video" content="${targetPreview}">
-                <meta property="og:video:type" content="image/gif">
-                <meta property="og:image:type" content="image/gif">
-            ` : `
-                <meta property="og:image:type" content="image/webp">
-            `}
+            <meta property="og:type" content="website">
             <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:title" content="Wydios • Preview">
             <meta name="twitter:image" content="${targetPreview}">
             <script>
-                setTimeout(() => {
-                    window.location.replace("${target}");
-                }, 100); 
+                window.location.replace("${target}");
             </script>
-            <meta http-equiv="refresh" content="2;url=${target}">
+            <meta http-equiv="refresh" content="0;url=${target}">
         </head>
-        <body style="background: #0e0e0e; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
-            <div style="text-align: center;">
-                <p>Redirecting to <a href="${target}" style="color: #3498db;">content</a>...</p>
-            </div>
+        <body style="background: #0e0e0e; color: white;">
+            Redirecting to <a href="${target}">${target}</a>...
         </body>
         </html>
     `);
