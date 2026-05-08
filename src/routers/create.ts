@@ -35,10 +35,20 @@ export async function handleCreate(req: Request, res: Response) {
         });
     };
 
-    const code = await generateCode(5);
-
     const expires = time.date();
     expires.setDate(expires.getDate() + (days ?? 7));
+
+    const existing = await database.getByTarget(url);
+    if (existing) {
+        await database.query(
+            "UPDATE short SET expires_at = ? WHERE code = ?",
+            [expires, existing.code]
+        );
+
+        return res.json({ error: false, code: existing.code, shortUrl: `${config.baseUrl}/${existing.code}`, expires });
+    };
+
+    const code = await generateCode(5);
 
     await Promise.all([
         database.query(

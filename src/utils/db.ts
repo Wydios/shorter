@@ -53,6 +53,15 @@ class Database {
     async deleteExpired(): Promise<void> {
         await this.query("DELETE FROM short WHERE expires_at < NOW()");
     };
+
+    async getByTarget(target: string) {
+        const rows = await this.query<{ code: string, expires_at: Date, clicks: number }>(
+            "SELECT * FROM short WHERE target = ? LIMIT 1",
+            [target]
+        );
+
+        return rows[0] ?? null;
+    };
 };
 
 const database = new Database();

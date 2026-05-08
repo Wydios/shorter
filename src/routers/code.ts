@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import time from "@utils/time.js";
 import database from "@utils/db.js";
 
-async function resolve(code: string): Promise<string | null> {
+async function resolve(code: string): Promise<{ link: string, count: number } | null> {
     const entry = await database.get(code);
     if (!entry) {
         return null;
@@ -13,7 +13,9 @@ async function resolve(code: string): Promise<string | null> {
     };
 
     await database.increaseClicks(code);
-    return entry.target;
+
+    const newCount = entry.clicks + 1;
+    return { link: entry.target, count: newCount };
 };
 
 export async function handleCode(req: Request<{ code: string }>, res: Response) {
@@ -30,18 +32,18 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
         });
     };
 
-    let target = entry.trim();
+    let target = entry.link.trim();
 
     if (!/^https?:\/\//i.test(target)) {
         target = "https://" + target;
     }
 
-    const isGif = target.toLowerCase().endsWith('.gif');
+    const isGif = target.toLowerCase().endsWith(".gif");
     const targetPreview = isGif 
         ? target 
         : target.replace(/\.(avif|png|jpg|jpeg|webp)$/i, "") + ".webp";
 
-    res.type('html');
+    res.type("html");
 
     return res.send(`
         <!DOCTYPE html>
@@ -50,11 +52,11 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Wydiso • Short</title>
-            <meta name="description" content="Coding projects, web tools and developer experiments."/>
+            <meta name="description" content="Shortet Url with ${entry.count} Clicks">
             <meta name="robots" content="index, follow"/>
             <meta name="googlebot" content="index, follow, max-image-preview:large"/>
             <meta property="og:title" content="Wydios • Preview">
-            <meta property="og:description" content="Coding projects, web tools and developer experiments.">
+            <meta property="og:description" content="Shortet Url with ${entry.count} Clicks">
             <meta property="og:image" content="${targetPreview}">
             <meta property="og:image:width" content="1200">
             <meta property="og:image:height" content="630">
