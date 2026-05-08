@@ -35,7 +35,11 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
     if (!/^https?:\/\//i.test(target)) {
         target = "https://" + target;
     }
-    
+
+    const targetPreview = target.replace(/\.(avif|gif|png|jpg|jpeg|webp)$/i, "") + ".webp";
+
+    res.type('html');
+
     return res.send(`
         <!DOCTYPE html>
         <html lang="en">
@@ -45,10 +49,11 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
             <title>Wydiso • Short</title>
             <meta property="og:title" content="Wydiso Shorter Preview">
             <meta property="og:description" content="Click to view the shared content">
-            <meta property="og:image" content="${target}">
+            <meta property="og:image" content="${targetPreview}">
+            <meta property="og:image:type" content="image/webp">
             <meta property="og:type" content="website">
             <meta name="twitter:card" content="summary_large_image">
-            <meta name="twitter:image" content="${target}">
+            <meta name="twitter:image" content="${targetPreview}">
             <script>
                 window.location.replace("${target}");
             </script>
