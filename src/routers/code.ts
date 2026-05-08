@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
+import { config } from "@data/config.js";
 import time from "@utils/time.js";
 import database from "@utils/db.js";
+import ogs from "open-graph-scraper";
 
 async function resolve(code: string): Promise<string | null> {
     const entry = await database.get(code);
@@ -35,6 +37,35 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
     if (!/^https?:\/\//i.test(target)) {
         target = "https://" + target;
     }
+    
+    let title = "Wydios Shorter";
+    let description = "Click to open";
+    let image = "";
 
-    return res.redirect(target);
+    try {
+        const result = await ogs({ url: target });
+
+        title = result.result.ogTitle || title;
+        description = result.result.ogDescription || description;
+        image = result.result.ogImage?.[0]?.url || image;
+    } catch (err) {
+        console.log("OG fetch failed");
+    }
+
+    return res.send(`<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta property="og:title" content="${title}">
+            <meta property="og:description" content="${description}">
+            <meta property="og:image" content="${image}">
+            <meta property="og:url" content="${config.baseUrl}/${code}">
+            <meta name="twitter:card" content="summary_large_image">
+            <meta http-equiv="refresh" content="0; url=${target}">
+        </head>
+        <body>
+            Redirecting...
+        </body>
+        </html>
+    `);
 };
