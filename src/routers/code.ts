@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import { config } from "@data/config.js";
 import time from "@utils/time.js";
 import database from "@utils/db.js";
-import ogs from "open-graph-scraper";
 
 async function resolve(code: string): Promise<string | null> {
     const entry = await database.get(code);
@@ -38,40 +36,35 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
         target = "https://" + target;
     }
     
-    let title = "Wydios Shorter";
-    let description = "Click to open";
-    let image = "";
-
-    try {
-        const result = await ogs({ 
-            url: target,
-            fetchOptions: {
-                headers: {
-                    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-                }
-            }
-        });
-
-        title = result.result.ogTitle || title;
-        description = result.result.ogDescription || description;
-        image = result.result.ogImage?.[0]?.url || image;
-    } catch (err) {
-        console.log("OG fetch failed");
-    }
-
-    return res.send(`<!DOCTYPE html>
-        <html>
+    return res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
         <head>
             <meta charset="UTF-8">
-            <meta property="og:title" content="${title}">
-            <meta property="og:description" content="${description}">
-            <meta property="og:image" content="${image}">
-            <meta property="og:url" content="${config.baseUrl}/${code}">
-            <meta name="twitter:card" content="summary_large_image">
-            <meta http-equiv="refresh" content="0; url=${target}">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Wydiso • Short</title>
+            <style>
+                body {
+                    margin: 0;
+                    padding: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 100vh;
+                    background-color: #0e0e0e;
+                    font-family: sans-serif;
+                }
+                img {
+                    max-width: 95%;
+                    max-height: 95vh;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                    border-radius: 8px;
+                    object-fit: contain;
+                }
+            </style>
         </head>
         <body>
-            Redirecting...
+            <img src="${target}" alt="Shared Image" />
         </body>
         </html>
     `);
