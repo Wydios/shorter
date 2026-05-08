@@ -36,7 +36,10 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
         target = "https://" + target;
     }
 
-    const targetPreview = target.replace(/\.(avif|gif|png|jpg|jpeg|webp)$/i, "") + ".webp";
+    const isGif = target.toLowerCase().endsWith('.gif');
+    const targetPreview = isGif 
+        ? target 
+        : target.replace(/\.(avif|png|jpg|jpeg)$/i, "") + ".webp";
 
     res.type('html');
 
@@ -48,12 +51,19 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Wydiso • Short</title>
             <meta property="og:title" content="Wydiso Shorter Preview">
-            <meta property="og:description" content="Click to view the shared content">
             <meta property="og:image" content="${targetPreview}">
-            <meta property="og:image:type" content="image/webp">
-            <meta property="og:type" content="website">
+            ${isGif ? `
+                <meta property="og:video" content="${targetPreview}">
+                <meta property="og:video:type" content="image/gif">
+                <meta property="og:image:type" content="image/gif">
+            ` : `
+                <meta property="og:image:type" content="image/webp">
+            `}
             <meta name="twitter:card" content="summary_large_image">
             <meta name="twitter:image" content="${targetPreview}">
+
+            <script>window.location.replace("${target}");</script>
+            <meta http-equiv="refresh" content="0;url=${target}">
             <script>
                 window.location.replace("${target}");
             </script>
