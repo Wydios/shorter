@@ -39,7 +39,7 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
     const isGif = target.toLowerCase().endsWith('.gif');
     const targetPreview = isGif 
         ? target 
-        : target.replace(/\.(avif|png|jpg|jpeg)$/i, "") + ".webp";
+        : target.replace(/\.(avif|png|jpg|jpeg|webp)$/i, "") + ".webp";
 
     res.type('html');
 
@@ -50,27 +50,25 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Wydiso • Short</title>
-            <meta property="og:title" content="Wydiso Shorter Preview">
+            <meta name="description" content="Coding projects, web tools and developer experiments."/>
+            <meta name="robots" content="index, follow"/>
+            <meta name="googlebot" content="index, follow, max-image-preview:large"/>
+            <meta property="og:title" content="Wydios • Preview">
+            <meta property="og:description" content="Coding projects, web tools and developer experiments.">
             <meta property="og:image" content="${targetPreview}">
-            ${isGif ? `
-                <meta property="og:video" content="${targetPreview}">
-                <meta property="og:video:type" content="image/gif">
-                <meta property="og:image:type" content="image/gif">
-            ` : `
-                <meta property="og:image:type" content="image/webp">
-            `}
+            <meta property="og:image:width" content="1200">
+            <meta property="og:image:height" content="630">
+            <meta property="og:type" content="website">
             <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:title" content="Wydios • Preview">
             <meta name="twitter:image" content="${targetPreview}">
-
-            <script>window.location.replace("${target}");</script>
-            <meta http-equiv="refresh" content="0;url=${target}">
             <script>
                 window.location.replace("${target}");
             </script>
             <meta http-equiv="refresh" content="0;url=${target}">
         </head>
-        <body style="background: #0e0e0e; color: white; font-family: sans-serif;">
-            Redirecting to <a href="${target}" style="color: #3498db;">${target}</a>...
+        <body style="background: #0e0e0e; color: white;">
+            Redirecting to <a href="${target}">${target}</a>...
         </body>
         </html>
     `);
