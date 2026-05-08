@@ -43,28 +43,19 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Wydiso • Short</title>
-            <style>
-                body {
-                    margin: 0;
-                    padding: 0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    min-height: 100vh;
-                    background-color: #0e0e0e;
-                    font-family: sans-serif;
-                }
-                img {
-                    max-width: 95%;
-                    max-height: 95vh;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                    border-radius: 8px;
-                    object-fit: contain;
-                }
-            </style>
+            <meta property="og:title" content="Wydiso Shorter Preview">
+            <meta property="og:description" content="Click to view the shared content">
+            <meta property="og:image" content="${target}">
+            <meta property="og:type" content="website">
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:image" content="${target}">
+            <script>
+                window.location.replace("${target}");
+            </script>
+            <meta http-equiv="refresh" content="0;url=${target}">
         </head>
-        <body>
-            <img src="${target}" alt="Shared Image" />
+        <body style="background: #0e0e0e; color: white; font-family: sans-serif;">
+            Redirecting to <a href="${target}" style="color: #3498db;">${target}</a>...
         </body>
         </html>
     `);
