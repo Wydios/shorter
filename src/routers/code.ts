@@ -43,7 +43,14 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
     let image = "";
 
     try {
-        const result = await ogs({ url: target });
+        const result = await ogs({ 
+            url: target,
+            fetchOptions: {
+                headers: {
+                    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+                }
+            }
+        });
 
         title = result.result.ogTitle || title;
         description = result.result.ogDescription || description;
