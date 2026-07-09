@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import database from "@utils/database.js";
+import { getCache, setCache } from "@utils/cache.js";
+import config from "@data";
 
 function normalizeUrl(url: string): string {
-    if (!url.startsWith("http")) {
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
         return "https://" + url;
     };
 
@@ -10,10 +12,25 @@ function normalizeUrl(url: string): string {
 };
 
 async function resolve(code: string) {
+    const cached = getCache(code);
+    if (cached) {
+        await database.increaseClicks(code);
+        return cached;
+    };
+
     const entry = await database.getShort(code);
     if (!entry) return null;
 
     if (new Date(entry.expires_at).getTime() < new Date().getTime()) return null;
+
+    const expiresSeconds = Math.max(1, Math.floor((new Date(entry.expires_at).getTime() - Date.now()) / 1000));
+
+    setCache(code, {
+        code: entry.code,
+        url: `${config.baseUrl}/${code}`,
+        target: entry.target,
+        expires: new Date(entry.expires_at)
+    }, expiresSeconds);
 
     await database.increaseClicks(code);
     return entry;

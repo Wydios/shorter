@@ -15,6 +15,7 @@ It provides a web interface, API access and a simple way to manage your short li
 * 🌐 Web dashboard
 * 🤖 API support for bots and external tools
 * ⚡ Fast Express backend
+* 🧠 In-memory caching for faster link lookups
 * 🗄️ MariaDB database support
 
 ---

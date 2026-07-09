@@ -2,6 +2,9 @@ const config = {
     // The Port on which the Shorter server will run. Example: 3000
     port: 3000,
 
+    // Maximum cache entries before the cache is reset
+    maxCacheCount: 500,
+
     // The public base URL of the Shorter service. This is used to generate full short URLs. Example: https://s.yourdomain.com/
     baseUrl: "",
 

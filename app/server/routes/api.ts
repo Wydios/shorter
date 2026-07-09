@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import database from "@utils/database.js";
 import generateCode from "@utils/generate.js";
+import { setCache, cleanupCache } from "@utils/cache.js";
 import { log } from "@utils/logger.js";
 import config from "@data";
 
@@ -64,12 +65,22 @@ export async function createDocument(req: Request, res: Response) {
     const expireDays = Math.min(Number(days) || 7, 7);
     expires.setDate(expires.getDate() + expireDays);
 
+    await database.deleteExpired();
+    cleanupCache();
+
     const existing = await database.getByTarget(user.id, url);
     if (existing) {
         await database.query(
             "UPDATE short SET expires_at = ? WHERE id = ?",
             [expires, existing.id]
         );
+
+        setCache(existing.code, {
+            code: existing.code,
+            url: `${config.baseUrl}/${existing.code}`,
+            target: existing.target,
+            expires
+        }, expireDays * 86400);
 
         log(`${user.username} refreshed the expiration time for ${url} (code: ${existing.code})`);
 
@@ -87,10 +98,14 @@ export async function createDocument(req: Request, res: Response) {
 
     const code = await generateCode(5);
 
-    await Promise.all([
-        database.createShort(user.id, code, url, expires),
-        database.deleteExpired()
-    ]);
+    await database.createShort(user.id, code, url, expires);
+
+    setCache(code, {
+        code,
+        url: `${config.baseUrl}/${code}`,
+        target: url,
+        expires
+    }, expireDays * 86400);
 
     log(`${user.username} created a new short link for ${url} (code: ${code})`);
 
