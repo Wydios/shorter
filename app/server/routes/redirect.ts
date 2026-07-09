@@ -1,6 +1,14 @@
 import { Request, Response } from "express";
 import database from "@utils/database.js";
 
+function normalizeUrl(url: string): string {
+    if (!url.startsWith("http")) {
+        return "https://" + url;
+    };
+
+    return url;
+};
+
 async function resolve(code: string) {
     const entry = await database.getShort(code);
     if (!entry) return null;
@@ -29,5 +37,5 @@ export async function handleCode(req: Request<{ code: string }>, res: Response) 
         });
     };
 
-    return res.redirect(entry.target);
+    return res.redirect(normalizeUrl(entry.target));
 };
