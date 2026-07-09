@@ -1,4 +1,5 @@
 import { createPool, Pool } from "mariadb";
+import { log, error } from "@utils/logger.js";
 import config from "@data";
 
 interface User {
@@ -40,8 +41,8 @@ class Database {
             const result = await connection.query(queryParam, params);
 
             return result as T[];
-        } catch (error) {
-            console.error(`Database | Error Query: ${queryParam} Parms: ${params},`, error);
+        } catch (err) {
+            error(`Database | Error Query: ${queryParam} Parms: ${params},`, err);
             return [];
         } finally {
             connection?.release();

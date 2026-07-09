@@ -6,6 +6,7 @@
     --text-secondary: #a1a1aa;
     --text-muted: #71717a;
 
+    --color-wydios: #0000FF;
     --color-blue: #001aff;
     --color-blue-brighter: #3344ff;
 }
@@ -88,11 +89,11 @@ main {
 }
 
 .nav-link {
-    color:#a1a1aa;
-    text-decoration:none;
-    font-size:1.1rem;
-    font-weight:600;
-    transition:.2s;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: 0.2s;
 }
 
 .nav-link:hover {
@@ -104,15 +105,15 @@ main {
 }
 
 .nav-underline::after {
-    content:"";
-    position:absolute;
-    bottom:-8px;
-    left:0;
-    width:100%;
-    height:2px;
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 2px;
     background: var(--color-blue);
-    transform:scaleX(0);
-    transition:.3s;
+    transform: scaleX(0);
+    transition: .3s;
 }
 
 .nav-underline:hover::after {
@@ -196,12 +197,24 @@ button:hover {
 }
 
 .info a {
-    color: #5267ff;
+    color: var(--color-wydios);
     text-decoration: none;
+    position: relative;
 }
 
-.info a:hover {
-    text-decoration: underline;
+.info a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 2px;
+    background: var(--color-wydios);
+    transition: width 0.3s ease;
+}
+
+.info a:hover::after {
+    width: 100%;
 }
 
 .divider {
@@ -225,11 +238,93 @@ button:hover {
 
 .short p {
     margin-bottom:10px;
-    color:#ddd;
+    color: var(--text-primary);
 }
 
-.short button {
-    margin-top:15px;
+.api-doc {
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.api-doc h2 {    
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+}
+
+.api-doc .subtitle {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.api-doc h3 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin: 30px 0 12px;
+}
+
+.api-doc pre {
+    background: var(--bg-card);
+    border: 1px solid var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    font-family:
+        "JetBrains Mono",
+        "Fira Code",
+        Consolas,
+        monospace;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    transition: 0.25s ease;
+}
+
+.api-doc pre:hover {
+    border-color: var(--color-blue-brighter);
+}
+
+.api-doc code {
+    font-family: inherit;
+}
+
+.api-doc h3:nth-of-type(2) {
+    color: #22c55e;
+}
+
+.api-doc h3:nth-of-type(2) + pre {
+    border-left: 4px solid #22c55e;
+}
+
+.api-doc h3:nth-of-type(3) {
+    color: #ef4444;
+}
+
+.api-doc h3:nth-of-type(3) + pre {
+    border-left: 4px solid #ef4444;
+}
+
+.api-doc h3:first-of-type {
+    color: var(--color-blue-brighter);
+}
+
+.api-doc h3:first-of-type + pre {
+    border-left: 4px solid var(--color-blue);
+}
+
+.api-doc pre::-webkit-scrollbar {
+    height: 8px;
+}
+
+.api-doc pre::-webkit-scrollbar-track {
+    background: #111;
+}
+
+.api-doc pre::-webkit-scrollbar-thumb {
+    background: var(--color-blue);
+    border-radius: 20px;
 }
 
 footer {
@@ -240,8 +335,8 @@ footer {
 }
 
 footer a {
-    color:var(--text-primary);
-    text-decoration:none;
+    color: var(--color-wydios);
+    text-decoration: none;
 }
 
 @keyframes spin {
@@ -278,5 +373,39 @@ footer a {
 
     h1 {
         font-size: 2rem;
+    }
+
+    .api-doc {
+        margin: 25px 15px;
+        max-width: 100%;
+    }
+
+    .api-doc h2 {
+        font-size: 1.25rem;
+        line-height: 1.4;
+    }
+
+    .api-doc .subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+
+    .api-doc h3 {
+        font-size: 1rem;
+        margin: 25px 0 10px;
+    }
+
+    .api-doc pre {
+        padding: 15px;
+        border-radius: 10px;
+
+        font-size: 0.75rem;
+        line-height: 1.5;
+
+        white-space: pre;
+    }
+
+    .api-doc pre:hover {
+        border-color: var(--color-blue);
     }
 }

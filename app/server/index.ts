@@ -4,6 +4,7 @@ import path from "path";
 
 import { fileURLToPath } from "url";
 import config from "@data";
+import { log } from "@utils/logger.js";
 
 import { createDocument } from "./routes/api.js";
 import { handleLogin } from "./routes/auth.js";
@@ -26,5 +27,5 @@ app.post("/me", handleMe);
 app.get("/:code", handleCode);
 
 app.listen(config.port, "0.0.0.0", () => {
-    console.log(`🚀 Shorter is running on port http://localhost:${config.port}`);
+    log(`🚀 Shorter is running on port http://localhost:${config.port}`);
 });

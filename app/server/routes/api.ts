@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import database from "@utils/database.js";
 import generateCode from "@utils/generate.js";
+import { log } from "@utils/logger.js";
 import config from "@data";
 
 export async function createDocument(req: Request, res: Response) {
@@ -47,20 +48,20 @@ export async function createDocument(req: Request, res: Response) {
 
     if (!url || typeof url !== "string") {
         return res.status(400).json({
-            error:true,
+            error: true,
             message: "Invalid URL. Please provide a valid link :P"
         });
     };
 
     if (config.blockedDomains.some(domain => url.toLowerCase().includes(domain))) {
         return res.status(403).json({
-            error:true,
+            error: true,
             message: "Oops! This domain is blocked and cannot be shortened >:o"
         });
     };
 
     const expires = new Date();
-    const expireDays = Math.min(Number(days) || 7, 365);
+    const expireDays = Math.min(Number(days) || 7, 7);
     expires.setDate(expires.getDate() + expireDays);
 
     const existing = await database.getByTarget(user.id, url);
@@ -70,12 +71,15 @@ export async function createDocument(req: Request, res: Response) {
             [expires, existing.id]
         );
 
+        log(`${user.username} refreshed the expiration time for ${url} (code: ${existing.code})`);
+
         return res.json({
-            error:false,
+            error: false,
             message: "Found your existing short link and refreshed the expiration time ;)",
             short: {
                 code: existing.code,
                 url: `${config.baseUrl}/${existing.code}`,
+                target: existing.target,
                 expires
             }
         });
@@ -87,6 +91,8 @@ export async function createDocument(req: Request, res: Response) {
         database.createShort(user.id, code, url, expires),
         database.deleteExpired()
     ]);
+
+    log(`${user.username} created a new short link for ${url} (code: ${code})`);
 
     return res.json({
         error: false,

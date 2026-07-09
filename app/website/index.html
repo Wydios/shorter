@@ -97,12 +97,59 @@
                 <div id="shortList">
                 </div>
             </div>
+
+            <div class="divider"></div>
+
+            <div class="api-doc">
+                <h2>🖥️ - How to Create a Short with the API</h2>
+
+                <h3>Example Request</h3>
+
+                <pre><code>
+                    fetch("https://s.wydios.de/documents", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer IAmASecretPassword"
+                        },
+                        body: JSON.stringify({
+                            username: "IAmACoolUser",
+                            url: "https://twitch.tv/wydios",
+                            days: 7 // Max Days is 7
+                        })
+                    });
+                </code></pre>
+
+                <div class="divider"></div>
+
+                <h3>Success Response Example</h3>
+
+                <pre><code>
+                    { 
+                        "error": false, 
+                        "message": "Done! Your short link is ready to use :)", 
+                        "short": { 
+                            "code": "abc12", 
+                            "url": "https://s.wydios.de/abc12", 
+                            "target": "https://twitch.tv/wydios", 
+                            "expires": "2026-07-16T18:00:00Z" 
+                        }
+                    }
+                </code></pre>
+                
+                <div class="divider"></div>
+
+                <h3>Error Response Example</h3>
+            
+                <pre><code>{ "error": true, "message": "Error Message" }</code></pre>
+            </div>
         </section>
     </main>
     <footer>
         <div class="divider"></div>
         
-        © 2026 <a href="https://wydios.de">wydios.de</a> • Developed with 💙 by Wydios
+        © 2026 <a href="https://wydios.de">wydios.de</a> • Developed with 💙 by
+        <span style="color: var(--color-wydios);">Wydios</span>
     </footer>
     <script src="assets/script.js"></script>
 </body>
