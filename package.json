@@ -7,8 +7,8 @@
         "dev": "tsx watch app/server/index.ts",
         "build": "tsc",
         "start": "node dist/server/index.js",
-        "pm2:start": "npm run ecosystem.config.cjs",
-        "pm2:restart": "npm run build && pm2 restart shorter",
+        "pm2:start": "pm2 start ecosystem.config.cjs",
+        "pm2:restart": "pm2 restart shorter",
         "pm2:stop": "pm2 stop shorter"
     },
     "keywords": [],
