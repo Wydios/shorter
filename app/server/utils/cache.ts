@@ -29,6 +29,10 @@ export function setCache(key: string, data: shortData, seconds: number): void {
     });
 };
 
+export function removeCache(key: string): boolean {
+    return cache.delete(key);
+};
+
 export function cleanupCache(): void {
     const now = Date.now();
 

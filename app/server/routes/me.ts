@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import database from "@utils/database.js";
+import { removeCache } from "@utils/cache.js";
 import { log } from "@utils/logger.js";
 
 export async function handlePostMe(req: Request, res: Response) {
@@ -72,6 +73,8 @@ export async function handleDeleteMe(req: Request, res: Response) {
             message: "Short not found"
         });
     };
+
+    removeCache(code);
 
     log(`${user.username} deleted short (code: ${code})`);
 
