@@ -87,6 +87,33 @@ async function createShort() {
     loadShorts(data.short.code);
 };
 
+async function deleteShort(code) {
+    const confirmDelete = confirm(`Delete short "${code}"?\nThe link will stop working immediately`);
+    if (!confirmDelete) return;
+
+    const response = await fetch("/me", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.password}`
+        },
+        body: JSON.stringify({
+            username: session.username,
+            code: code
+        })
+    });
+
+    const data = await response.json();
+    if (data.error) {
+        alert(data.message);
+        return;
+    };
+
+    alert(`Short with code ${code} has been deleted`);
+
+    loadShorts();
+};
+
 async function loadShorts(currentCode = null) {
     const username = session.username;
     if (!username) {
@@ -171,8 +198,12 @@ async function loadShorts(currentCode = null) {
                 ${short.clicks}
             </p>
 
-            <button onclick="copyShort('${short.code}')">
-                Copy
+            <button class="cool-button" onclick="copyShort('${short.code}')">
+                <span>Copy</span>
+            </button>
+
+            <button class="delete-button" onclick="deleteShort('${short.code}')">
+                <span>Delete</span>
             </button>
         `;
 

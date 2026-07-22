@@ -1,3 +1,6 @@
+@import url("navbar.css");
+@import url("api.css");
+
 :root {
     --bg-card: #1a1a22;
     --card-bg: rgba(255, 255, 255, 0.02);
@@ -5,10 +8,13 @@
     --text-primary: #ffffff;
     --text-secondary: #a1a1aa;
     --text-muted: #71717a;
+    --text-input: #111;
 
-    --color-wydios: #0000FF;
     --color-blue: #001aff;
     --color-blue-brighter: #3344ff;
+    --color-blue-darker: #0000FF;
+    --color-green: #22c55e;
+    --color-red: #ef4444;
 }
 
 * {
@@ -83,43 +89,6 @@ main {
     animation: spin 1.5s linear infinite;
 }
 
-.nav {
-    display:flex;
-    align-items:center;
-}
-
-.nav-link {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-size: 1.1rem;
-    font-weight: 600;
-    transition: 0.2s;
-}
-
-.nav-link:hover {
-    color: var(--color-blue);
-}
-
-.nav-underline {
-    position:relative;
-}
-
-.nav-underline::after {
-    content: "";
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: var(--color-blue);
-    transform: scaleX(0);
-    transition: .3s;
-}
-
-.nav-underline:hover::after {
-    transform: scaleX(1);
-}
-
 .card {
     width: 100%;
     background: var(--card-bg);
@@ -154,7 +123,7 @@ input {
     width: 100%;
     padding: 14px 16px;
     margin-bottom: 15px;
-    background: #111;
+    background: var(--text-input);
     border: 1px solid rgba(255,255,255,.15);
     border-radius: 14px;
     color: var(--text-primary);
@@ -166,29 +135,6 @@ input:focus {
     border-color: var(--color-blue);
 }
 
-button {
-    width:100%;
-    padding: 15px;
-    margin-top: 10px;
-    background: linear-gradient(
-        135deg,
-        var(--color-blue),
-        var(--color-blue-brighter)
-    );
-    border:none;
-    color:var(--text-primary);
-    border-radius:14px;
-    font-size:1.05rem;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.2s;
-}
-
-button:hover {
-    transform:translateY(-2px);
-    box-shadow:0 10px 30px rgba(0,26,255,.4);
-}
-
 .info {
     margin-top: 30px;
     text-align: center;
@@ -197,7 +143,7 @@ button:hover {
 }
 
 .info a {
-    color: var(--color-wydios);
+    color: var(--color-blue-darker);
     text-decoration: none;
     position: relative;
 }
@@ -209,7 +155,7 @@ button:hover {
     bottom: -3px;
     width: 0;
     height: 2px;
-    background: var(--color-wydios);
+    background: var(--color-blue-darker);
     transition: width 0.3s ease;
 }
 
@@ -237,94 +183,90 @@ button:hover {
 }
 
 .short p {
-    margin-bottom:10px;
+    margin-bottom: 10px;
     color: var(--text-primary);
 }
 
-.api-doc {
-    max-width: 900px;
-    margin: 40px auto;
-}
-
-.api-doc h2 {    
-    font-size: 1.5rem;
-    margin-bottom: 15px;
+.cool-button,
+.delete-button {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    background: var(--text-input);
     color: var(--text-primary);
+    border-radius: 14px;
+    border: 1px solid;
+    font-size: 1.05rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease;
 }
 
-.api-doc .subtitle {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 30px;
+.cool-button::before,
+.delete-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    transition: transform .50s ease;
+    z-index: 1;
 }
 
-.api-doc h3 {
-    color: var(--text-primary);
-    font-size: 1.1rem;
-    margin: 30px 0 12px;
-}
-
-.api-doc pre {
-    background: var(--bg-card);
-    border: 1px solid var(--card-bg);
-    border-radius: 12px;
-    padding: 20px;
-    overflow-x: auto;
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    line-height: 1.6;
-    font-family:
-        "JetBrains Mono",
-        "Fira Code",
-        Consolas,
-        monospace;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    transition: 0.25s ease;
-}
-
-.api-doc pre:hover {
+.cool-button {
     border-color: var(--color-blue-brighter);
 }
 
-.api-doc code {
-    font-family: inherit;
+.cool-button::before {
+    background: linear-gradient(135deg, var(--color-blue), var(--color-blue-brighter));
 }
 
-.api-doc h3:nth-of-type(2) {
-    color: #22c55e;
+.delete-button {
+    border-color: var(--color-red);
 }
 
-.api-doc h3:nth-of-type(2) + pre {
-    border-left: 4px solid #22c55e;
+.delete-button::before {
+    background: linear-gradient(135deg, var(--color-red), #ff6666);
 }
 
-.api-doc h3:nth-of-type(3) {
-    color: #ef4444;
+.copy-button,
+.delete-button {
+    isolation: isolate;
 }
 
-.api-doc h3:nth-of-type(3) + pre {
-    border-left: 4px solid #ef4444;
+.cool-button,
+.delete-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.api-doc h3:first-of-type {
-    color: var(--color-blue-brighter);
+.cool-button:hover::before,
+.delete-button:hover::before {
+    transform: translateX(0);
 }
 
-.api-doc h3:first-of-type + pre {
-    border-left: 4px solid var(--color-blue);
+.cool-button:hover,
+.delete-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0,0,0,.35);
 }
 
-.api-doc pre::-webkit-scrollbar {
-    height: 8px;
+.cool-button:active,
+.delete-button:active {
+    transform: scale(.50);
 }
 
-.api-doc pre::-webkit-scrollbar-track {
-    background: #111;
+.cool-button,
+.delete-button {
+    z-index: 1;
 }
 
-.api-doc pre::-webkit-scrollbar-thumb {
-    background: var(--color-blue);
-    border-radius: 20px;
+.cool-button span,
+.delete-button span {
+    position: relative;
+    z-index: 2;
 }
 
 footer {
@@ -335,7 +277,7 @@ footer {
 }
 
 footer a {
-    color: var(--color-wydios);
+    color: var(--color-blue-darker);
     text-decoration: none;
 }
 
@@ -373,39 +315,5 @@ footer a {
 
     h1 {
         font-size: 2rem;
-    }
-
-    .api-doc {
-        margin: 25px 15px;
-        max-width: 100%;
-    }
-
-    .api-doc h2 {
-        font-size: 1.25rem;
-        line-height: 1.4;
-    }
-
-    .api-doc .subtitle {
-        font-size: 0.9rem;
-        margin-bottom: 20px;
-    }
-
-    .api-doc h3 {
-        font-size: 1rem;
-        margin: 25px 0 10px;
-    }
-
-    .api-doc pre {
-        padding: 15px;
-        border-radius: 10px;
-
-        font-size: 0.75rem;
-        line-height: 1.5;
-
-        white-space: pre;
-    }
-
-    .api-doc pre:hover {
-        border-color: var(--color-blue);
     }
 }

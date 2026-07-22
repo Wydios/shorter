@@ -68,12 +68,9 @@ export async function createDocument(req: Request, res: Response) {
     await database.deleteExpired();
     cleanupCache();
 
-    const existing = await database.getByTarget(user.id, url);
+    const existing = await database.getShortByTarget(user.id, url);
     if (existing) {
-        await database.query(
-            "UPDATE shorts SET expires_at = ? WHERE id = ?",
-            [expires, existing.id]
-        );
+        await database.updateExpiresAt(existing.id, expires);
 
         setCache(existing.code, {
             code: existing.code,

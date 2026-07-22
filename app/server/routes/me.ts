@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import database from "@utils/database.js";
+import { log } from "@utils/logger.js";
 
-export async function handleMe(req: Request, res: Response) {
+export async function handlePostMe(req: Request, res: Response) {
     const { username } = req.body;
     const auth = req.headers.authorization;
 
@@ -12,8 +13,6 @@ export async function handleMe(req: Request, res: Response) {
         });
     };
 
-    const password = auth.replace("Bearer ", "");
-
     const user = await database.getUser(username);
     if (!user) {
         return res.status(401).json({
@@ -22,6 +21,7 @@ export async function handleMe(req: Request, res: Response) {
         });
     };
 
+    const password = auth.replace("Bearer ", "");
     if (user.password !== password) {
         return res.status(401).json({
             error: true,
@@ -33,9 +33,50 @@ export async function handleMe(req: Request, res: Response) {
 
     return res.json({
         error: false,
-        user: {
-            username: user.username
-        },
+        user: { username: user.username },
         shorts
+    });
+};
+
+export async function handleDeleteMe(req: Request, res: Response) {
+    const { username, code } = req.body;
+    const auth = req.headers.authorization;
+
+    if (!username || !auth) {
+        return res.status(400).json({
+            error: true,
+            message: "Username or authorization missing"
+        });
+    };
+
+    const user = await database.getUser(username);
+    if (!user) {
+        return res.status(401).json({
+            error: true,
+            message: "User not found"
+        });
+    };
+
+    const password = auth.replace("Bearer ", "");
+    if (user.password !== password) {
+        return res.status(401).json({
+            error: true,
+            message: "Wrong password"
+        });
+    };
+
+    const deleted = await database.deleteShort(user.id, code);
+    if (!deleted) {
+        return res.status(404).json({
+            error: true,
+            message: "Short not found"
+        });
+    };
+
+    log(`${user.username} deleted short (code: ${code})`);
+
+    return res.json({
+        error: false,
+        message: "Short deleted"
     });
 };

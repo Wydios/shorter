@@ -1,5 +1,5 @@
 import { createPool, Pool } from "mariadb";
-import { log, error } from "@utils/logger.js";
+import { error } from "@utils/logger.js";
 import config from "@data";
 
 interface User {
@@ -19,6 +19,10 @@ interface Short {
     clicks: number
 };
 
+interface DeleteResult {
+    affectedRows: number
+};
+
 class Database {
     private pool: Pool;
 
@@ -32,7 +36,7 @@ class Database {
         });
     };
 
-    async query<T = any>(queryParam: string, params: any[] = []): Promise<T[]> {
+    async execute<T = any>(queryParam: string, params: any[] = []): Promise<T> {
         let connection;
 
         try {
@@ -40,13 +44,18 @@ class Database {
 
             const result = await connection.query(queryParam, params);
 
-            return result as T[];
+            return result as T;
         } catch (err) {
-            error(`Database | Error Query: ${queryParam} Parms: ${params},`, err);
-            return [];
+            error(`Database | Error Query: ${queryParam} Params: ${params}`, err);
+            throw err;
         } finally {
             connection?.release();
         }
+    };
+
+    async query<T = any>(queryParam: string, params: any[] = []): Promise<T[]> {
+        const result = await this.execute<any>(queryParam, params);
+        return Array.isArray(result) ? result : [result];
     };
 
     async getUser(userName: string): Promise<User | null> {
@@ -58,17 +67,24 @@ class Database {
         return users[0] ?? null;
     };
 
-    async getUserById(userId: number): Promise<Pick<User, "id" | "username"> | null> {
-        const users = await this.query<Pick<User, "id" | "username">>(
-            "SELECT id, username FROM users WHERE id = ? LIMIT 1",
+    async getUserShorts(userId: number): Promise<Short[]> {
+        return await this.query<Short>(
+            "SELECT * FROM shorts WHERE user_id = ? ORDER BY created_at DESC",
             [userId]
         );
+    };
 
-        return users[0] ?? null;
+    async getShortByTarget(userId: number, target: string): Promise<Short | null> {
+        const rows = await this.query<Short>(
+            "SELECT * FROM shorts WHERE user_id = ? AND target = ? LIMIT 1",
+            [userId, target]
+        );
+
+        return rows[0] ?? null;
     };
 
     async createShort(userId: number, code: string, target: string, expiresAt: Date): Promise<void> {
-        await this.query(
+        await this.execute(
             "INSERT INTO shorts (user_id, code, target, expires_at) VALUES (?, ?, ?, ?)", 
             [userId, code, target, expiresAt]
         );
@@ -83,32 +99,32 @@ class Database {
         return rows[0] ?? null;
     };
 
-    async getUserShorts(userId: number): Promise<Short[]> {
-        return await this.query<Short>(
-            "SELECT * FROM shorts WHERE user_id = ? ORDER BY created_at DESC",
-            [userId]
-        );
-    };
-
     async codeExists(code: string): Promise<boolean> {
         return (await this.query("SELECT id FROM shorts WHERE code = ? LIMIT 1", [code])).length > 0;
     };
 
     async increaseClicks(code: string): Promise<void> {
-        await this.query("UPDATE shorts SET clicks = clicks + 1 WHERE code = ?", [code]);
+        await this.execute("UPDATE shorts SET clicks = clicks + 1 WHERE code = ?", [code]);
+    };
+
+    async updateExpiresAt(id: number, expires: Date): Promise<void> {
+        await this.execute(
+            "UPDATE shorts SET expires_at = ? WHERE id = ?",
+            [expires, id]
+        );
+    };
+
+    async deleteShort(userId: number, code: string): Promise<boolean> {
+        const result = await this.execute<DeleteResult>(
+            "DELETE FROM shorts WHERE user_id = ? AND code = ?",
+            [userId, code]
+        );
+
+        return result.affectedRows > 0;
     };
 
     async deleteExpired(): Promise<void> {
-        await this.query("DELETE FROM shorts WHERE expires_at < NOW()");
-    };
-
-    async getByTarget(userId: number, target: string): Promise<Short | null> {
-        const rows = await this.query<Short>(
-            "SELECT * FROM shorts WHERE user_id = ? AND target = ? LIMIT 1",
-            [userId, target]
-        );
-
-        return rows[0] ?? null;
+        await this.execute("DELETE FROM shorts WHERE expires_at < NOW()");
     };
 };
 

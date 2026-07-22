@@ -1,4 +1,4 @@
-import { log } from "@utils/logger.js";
+import { warn } from "@utils/logger.js";
 import config from "@data";
 
 interface shortData {
@@ -42,6 +42,6 @@ export function cleanupCache(): void {
         const size = cache.size;
 
         cache.clear();
-        log(`🧹 Cache cleared (${size} entries removed)`);
+        warn(`🧹 Cache cleared (${size} entries removed)`);
     }
 };

@@ -4,11 +4,11 @@ import path from "path";
 
 import { fileURLToPath } from "url";
 import config from "@data";
-import { log } from "@utils/logger.js";
+import { info } from "@utils/logger.js";
 
 import { createDocument } from "./routes/api.js";
 import { handleLogin } from "./routes/auth.js";
-import { handleMe } from "./routes/me.js";
+import { handlePostMe, handleDeleteMe } from "./routes/me.js";
 import { handleCode } from "./routes/redirect.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,9 +23,10 @@ app.use(express.static(path.join(__dirname, "../website")));
 
 app.post("/documents", createDocument);
 app.post("/login", handleLogin);
-app.post("/me", handleMe);
+app.post("/me", handlePostMe);
+app.delete("/me", handleDeleteMe);
 app.get("/:code", handleCode);
 
 app.listen(config.port, "0.0.0.0", () => {
-    log(`🚀 Shorter is running on port http://localhost:${config.port}`);
+    info(`🚀 Shorter is running on port http://localhost:${config.port}`);
 });

@@ -29,8 +29,6 @@ export async function handleLogin(req: Request, res: Response) {
     return res.json({
         error: false,
         message: "Login successful",
-        user: {
-            username: user.username
-        }
+        user: { username: user.username }
     });
 };

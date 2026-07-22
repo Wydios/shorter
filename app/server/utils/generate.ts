@@ -12,6 +12,6 @@ export default async function generateCode(length = 5): Promise<string> {
         const exists = await database.codeExists(code);
         if (!exists) {
             return code;
-        }
+        };
     }
 };

@@ -7,7 +7,8 @@ module.exports = {
             interpreter_args: "--import tsx",
             watch: false,
             env: {
-                NODE_ENV: "production"
+                NODE_ENV: "production",
+                FORCE_COLOR: "1"
             }
         }
     ]
