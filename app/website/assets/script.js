@@ -36,7 +36,7 @@ async function login() {
         alert(data.message);
         return;
     };
-    console.log(data)
+
     session.username = data.user.login;
     session.password = password;
 
