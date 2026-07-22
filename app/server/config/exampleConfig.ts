@@ -15,6 +15,10 @@ const config = {
         // Your Database password.
         password: "",
 
+        // The name of the database containing the shared `users` table.
+        // Leave empty to use the local `users` table in the current database.
+        userDatabase: "",
+
         // Your Database name. Example: "shorter"
         database: "shorter",
 

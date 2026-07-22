@@ -4,7 +4,8 @@ import config from "@data";
 
 interface User {
     id: number,
-    username: string,
+    user_login: string,
+    user_name: string,
     password: string,
     created_at: Date
 };
@@ -25,6 +26,7 @@ interface DeleteResult {
 
 class Database {
     private pool: Pool;
+    private readonly usersTable: string;
 
     constructor() {
         this.pool = createPool({
@@ -34,6 +36,10 @@ class Database {
             host: config.database.ip,
             connectionLimit: 10
         });
+
+        this.usersTable = config.database.userDatabase
+            ? `${config.database.userDatabase}.users`
+            : "users";
     };
 
     async execute<T = any>(queryParam: string, params: any[] = []): Promise<T> {
@@ -60,7 +66,7 @@ class Database {
 
     async getUser(userName: string): Promise<User | null> {
         const users = await this.query<User>(
-            "SELECT * FROM users WHERE username = ? LIMIT 1",
+            `SELECT * FROM ${this.usersTable} WHERE user_login = ? LIMIT 1`,
             [userName?.toLowerCase()]
         );
 

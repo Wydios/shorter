@@ -4,6 +4,7 @@ import generateCode from "@utils/generate.js";
 import { setCache, cleanupCache } from "@utils/cache.js";
 import { log } from "@utils/logger.js";
 import config from "@data";
+import validToken from "@utils/auth.js";
 
 export async function createDocument(req: Request, res: Response) {
     const { url, days, username } = req.body;
@@ -40,7 +41,8 @@ export async function createDocument(req: Request, res: Response) {
         });
     };
 
-    if (user.password !== password) {
+    const valid = await validToken(password, user.password);
+    if (!valid) {
         return res.status(401).json({
             error: true,
             message: "Wrong password. Please try again XD"
@@ -79,7 +81,7 @@ export async function createDocument(req: Request, res: Response) {
             expires
         }, expireDays * 86400);
 
-        log(`${user.username} refreshed the expiration time for ${url} (code: ${existing.code})`);
+        log(`${user.user_login} refreshed the expiration time for ${url} (code: ${existing.code})`);
 
         return res.json({
             error: false,
@@ -104,7 +106,7 @@ export async function createDocument(req: Request, res: Response) {
         expires
     }, expireDays * 86400);
 
-    log(`${user.username} created a new short link for ${url} (code: ${code})`);
+    log(`${user.user_login} created a new short link for ${url} (code: ${code})`);
 
     return res.json({
         error: false,

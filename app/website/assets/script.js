@@ -36,13 +36,13 @@ async function login() {
         alert(data.message);
         return;
     };
-
-    session.username = username;
+    console.log(data)
+    session.username = data.user.login;
     session.password = password;
 
     document.getElementById("login").style.display = "none";
     document.getElementById("dashboard").classList.remove("hidden");
-    document.getElementById("displayName").innerText = data.user.username;
+    document.getElementById("displayName").innerText = data.user.login === data.user.name.toLowerCase() ? data.user.name : data.user.login;
 
     loadShorts();
 };

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import database from "@utils/database.js";
+import validToken from "@utils/auth.js";
 
 export async function handleLogin(req: Request, res: Response) {
     const { username, password } = req.body;
@@ -19,7 +20,8 @@ export async function handleLogin(req: Request, res: Response) {
         });
     };
 
-    if (user.password !== password) {
+    const valid = await validToken(password, user.password);
+    if (!valid) {
         return res.status(401).json({
             error: true,
             message: "Wrong password"
@@ -29,6 +31,9 @@ export async function handleLogin(req: Request, res: Response) {
     return res.json({
         error: false,
         message: "Login successful",
-        user: { username: user.username }
+        user: { 
+            login: user.user_login,
+            name: user.user_name
+        }
     });
 };
