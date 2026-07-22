@@ -71,7 +71,7 @@ export async function createDocument(req: Request, res: Response) {
     const existing = await database.getByTarget(user.id, url);
     if (existing) {
         await database.query(
-            "UPDATE short SET expires_at = ? WHERE id = ?",
+            "UPDATE shorts SET expires_at = ? WHERE id = ?",
             [expires, existing.id]
         );
 

@@ -69,14 +69,14 @@ class Database {
 
     async createShort(userId: number, code: string, target: string, expiresAt: Date): Promise<void> {
         await this.query(
-            "INSERT INTO short (user_id, code, target, expires_at) VALUES (?, ?, ?, ?)", 
+            "INSERT INTO shorts (user_id, code, target, expires_at) VALUES (?, ?, ?, ?)", 
             [userId, code, target, expiresAt]
         );
     };
 
     async getShort(code: string): Promise<Short | null> {
         const rows = await this.query<Short>(
-            "SELECT * FROM short WHERE code = ? LIMIT 1",
+            "SELECT * FROM shorts WHERE code = ? LIMIT 1",
             [code]
         );
 
@@ -85,26 +85,26 @@ class Database {
 
     async getUserShorts(userId: number): Promise<Short[]> {
         return await this.query<Short>(
-            "SELECT * FROM short WHERE user_id = ? ORDER BY created_at DESC",
+            "SELECT * FROM shorts WHERE user_id = ? ORDER BY created_at DESC",
             [userId]
         );
     };
 
     async codeExists(code: string): Promise<boolean> {
-        return (await this.query("SELECT id FROM short WHERE code = ? LIMIT 1", [code])).length > 0;
+        return (await this.query("SELECT id FROM shorts WHERE code = ? LIMIT 1", [code])).length > 0;
     };
 
     async increaseClicks(code: string): Promise<void> {
-        await this.query("UPDATE short SET clicks = clicks + 1 WHERE code = ?", [code]);
+        await this.query("UPDATE shorts SET clicks = clicks + 1 WHERE code = ?", [code]);
     };
 
     async deleteExpired(): Promise<void> {
-        await this.query("DELETE FROM short WHERE expires_at < NOW()");
+        await this.query("DELETE FROM shorts WHERE expires_at < NOW()");
     };
 
     async getByTarget(userId: number, target: string): Promise<Short | null> {
         const rows = await this.query<Short>(
-            "SELECT * FROM short WHERE user_id = ? AND target = ? LIMIT 1",
+            "SELECT * FROM shorts WHERE user_id = ? AND target = ? LIMIT 1",
             [userId, target]
         );
 
