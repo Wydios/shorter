@@ -1,4 +1,5 @@
 @import url("navbar.css");
+@import url("shorter.css");
 @import url("api.css");
 
 :root {
@@ -51,44 +52,6 @@ main {
     padding: 40px 20px;
 }
 
-.topbar {
-    position: sticky;
-    top: 20px;
-    width: calc(100% - 80px);
-    max-width: 1100px;
-    margin: 0 auto 20px;
-    padding: 16px 28px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, .1);
-    border-radius: 18px;
-    box-shadow: 0 15px 40px rgba(0,0,0,.4);
-    z-index: 100;
-}
-
-.logo {
-    display:flex;
-    align-items:center;
-    gap:12px;
-    color: var(--text-primary);
-    text-decoration:none;
-    font-size:1.4rem;
-    font-weight:700;
-}
-
-.logo img {
-    width:38px;
-    height:38px;
-    border-radius:10px;
-}
-
-.logo:hover img {
-    animation: spin 1.5s linear infinite;
-}
-
 .card {
     width: 100%;
     background: var(--card-bg);
@@ -135,34 +98,6 @@ input:focus {
     border-color: var(--color-blue);
 }
 
-.info {
-    margin-top: 30px;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 2rem;
-}
-
-.info a {
-    color: var(--color-blue-darker);
-    text-decoration: none;
-    position: relative;
-}
-
-.info a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -3px;
-    width: 0;
-    height: 2px;
-    background: var(--color-blue-darker);
-    transition: width 0.3s ease;
-}
-
-.info a:hover::after {
-    width: 100%;
-}
-
 .divider {
     width:90%;
     height:1px;
@@ -172,19 +107,6 @@ input:focus {
 
 .box {
     margin-top:35px;
-}
-
-.short {
-    background:rgba(0,0,0,.35);
-    border:1px solid rgba(255,255,255,.08);
-    padding:25px;
-    border-radius:18px;
-    margin-top:15px;
-}
-
-.short p {
-    margin-bottom: 10px;
-    color: var(--text-primary);
 }
 
 .cool-button,
@@ -281,32 +203,9 @@ footer a {
     text-decoration: none;
 }
 
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 @media(max-width: 600px) {
-    .topbar {
-        width: calc(100% - 30px);
-        padding: 14px 18px;
-    }
-
     .container {
         padding: 20px 15px;
-    }
-
-    .logo {
-        font-size: 1.1rem;
-    }
-
-    .nav-link {
-        font-size: .95rem;
     }
 
     .card {

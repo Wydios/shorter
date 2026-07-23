@@ -1,7 +1,4 @@
-let session = {
-    username: null,
-    password: null
-};
+import { session } from "./auth.js";
 
 function copyShort(code) {
     const url = `https://s.wydios.de/${code}`;
@@ -11,48 +8,10 @@ function copyShort(code) {
     alert("Copied");
 };
 
-async function login() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value;
-
-    if (!username || !password) {
-        alert("Please enter username and password");
-        return;
-    };
-
-    const response = await fetch("/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            username,
-            password
-        })
-    });
-
-    const data = await response.json();
-    if (data.error) {
-        alert(data.message);
-        return;
-    };
-
-    session.username = data.user.login;
-    session.password = password;
-
-    document.getElementById("login").style.display = "none";
-    document.getElementById("dashboard").classList.remove("hidden");
-    document.getElementById("displayName").innerText = data.user.login === data.user.name.toLowerCase() ? data.user.name : data.user.login;
-
-    loadShorts();
-};
-
 async function createShort() {
     const url = document.getElementById("url").value.trim();
-
     if (!url) {
-        alert("Please enter a URL");
-        return;
+        return alert("Please enter a URL");
     };
 
     const response = await fetch("/documents", {
@@ -70,8 +29,7 @@ async function createShort() {
 
     const data = await response.json();
     if (data.error) {
-        alert(data.message);
-        return;
+        return alert(data.message);
     };
 
     document.getElementById("url").value = "";
@@ -105,8 +63,7 @@ async function deleteShort(code) {
 
     const data = await response.json();
     if (data.error) {
-        alert(data.message);
-        return;
+        return alert(data.message);
     };
 
     alert(`Short with code ${code} has been deleted`);
@@ -114,12 +71,8 @@ async function deleteShort(code) {
     loadShorts();
 };
 
-async function loadShorts(currentCode = null) {
-    const username = session.username;
-    if (!username) {
-        console.error("No user logged in");
-        return;
-    };
+export async function loadShorts(currentCode = null) {
+    if (!session.username || !session.password) return;
 
     const response = await fetch("/me", {
         method: "POST",
@@ -128,27 +81,24 @@ async function loadShorts(currentCode = null) {
             "Authorization": `Bearer ${session.password}`
         },
         body: JSON.stringify({
-            username: username
+            username: session.username
         })
     });
 
     const data = await response.json();
     if (data.error) {
-        console.error(data.message);
-        return;
+        return console.error(data.message);
     };
 
     const shortList = document.getElementById("shortList");
     shortList.innerHTML = "";
 
-    if (data.shorts.length === 0) {
-        shortList.innerHTML = `
+    if (!data.shorts.length) {
+        return shortList.innerHTML = `
             <p class="info">
-                You don't have any shorts yet
+                You don't have any shorts yet.
             </p>
         `;
-
-        return;
     };
 
     const sortedShorts = data.shorts.sort((a, b) => {

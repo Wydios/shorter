@@ -1,0 +1,40 @@
+.info {
+    margin-top: 30px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 2rem;
+}
+
+.info a {
+    color: var(--color-blue-darker);
+    text-decoration: none;
+    position: relative;
+}
+
+.info a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 2px;
+    background: var(--color-blue-darker);
+    transition: width 0.3s ease;
+}
+
+.info a:hover::after {
+    width: 100%;
+}
+
+.short {
+    background:rgba(0,0,0,.35);
+    border:1px solid rgba(255,255,255,.08);
+    padding:25px;
+    border-radius:18px;
+    margin-top:15px;
+}
+
+.short p {
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}

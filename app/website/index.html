@@ -18,7 +18,7 @@
     <meta name="twitter:title" content="Wydios • Shorter">
     <meta name="twitter:description" content="Safe and Simple URL Shortener :)">
 
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
     <nav class="topbar">
@@ -26,15 +26,30 @@
             <img src="assets/images/favicon.ico">
         </a>
 
-        <div class="nav">
+        <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+            ☰
+        </button>
+
+        <div id="nav" class="nav">
+            <a
+                href="https://github.com/Wydios/shorter"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="nav-link nav-underline nav-github"
+            >
+                GitHub
+            </a>
+
             <a 
                 href="https://wydios.de" 
                 class="nav-link nav-underline"
             >
-                Back to Main Site
+                Home
             </a>
         </div>
     </nav>
+
+    <div id="navOverlay" class="nav-overlay"></div>
 
     <main class="container">
         <section class="card" id="login">
@@ -56,7 +71,7 @@
                 placeholder="Password"
             >
         
-            <button class="cool-button" onclick="login()">
+            <button id="loginButton" class="cool-button">
                 <span>Login</span>
             </button>
         
@@ -148,9 +163,13 @@
     <footer>
         <div class="divider"></div>
         
-        © 2026 <a href="https://wydios.de">wydios.de</a> • Developed with 💙 by
-        <span style="color: var(--color-blue-darker);">Wydios</span>
+        © 2026
+        <a href="https://wydios.de">wydios.de</a>
+        • Developed with 💙 by
+        <span style="color: var(--color-blue-darker);">
+            Wydios
+        </span>
     </footer>
-    <script src="assets/script.js"></script>
+    <script type="module" src="assets/js/index.js"></script>
 </body>
 </html>
