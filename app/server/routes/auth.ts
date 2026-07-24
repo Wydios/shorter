@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import database from "@utils/database.js";
-import validToken from "@utils/auth.js";
+import validToken from "@short/app/server/utils/helpers/auth.js";
 
 export async function handleLogin(req: Request, res: Response) {
     const { username, password } = req.body;

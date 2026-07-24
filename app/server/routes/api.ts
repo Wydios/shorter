@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import database from "@utils/database.js";
-import generateCode from "@utils/generate.js";
+import generateCode from "@short/app/server/utils/helpers/generate.js";
 import { setCache, cleanupCache } from "@utils/cache.js";
 import { log } from "@utils/logger.js";
 import config from "@data";
-import validToken from "@utils/auth.js";
+import validToken from "@short/app/server/utils/helpers/auth.js";
 
 export async function createDocument(req: Request, res: Response) {
     const { url, days, username } = req.body;

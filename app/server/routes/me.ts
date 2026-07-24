@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import database from "@utils/database.js";
 import { removeCache } from "@utils/cache.js";
 import { log } from "@utils/logger.js";
-import validToken from "@utils/auth.js";
+import validToken from "@short/app/server/utils/helpers/auth.js";
 
 export async function handlePostMe(req: Request, res: Response) {
     const { username } = req.body;

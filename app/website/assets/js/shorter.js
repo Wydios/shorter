@@ -5,7 +5,7 @@ function copyShort(code) {
 
     navigator.clipboard.writeText(url);
 
-    alert("Copied");
+    alert("Copied to Clipboard!");
 };
 
 export async function createShort() {
@@ -46,9 +46,8 @@ export async function createShort() {
 };
 
 async function deleteShort(code) {
-    const confirmDelete = confirm(`Delete short "${code}"?\nThe link will stop working immediately`);
-    if (!confirmDelete) return;
-
+    if (!confirm(`Delete short "${code}"?\nThe link will stop working immediately`)) return;
+    
     const response = await fetch("/me", {
         method: "DELETE",
         headers: {
