@@ -8,7 +8,7 @@ function copyShort(code) {
     alert("Copied");
 };
 
-async function createShort() {
+export async function createShort() {
     const url = document.getElementById("url").value.trim();
     if (!url) {
         return alert("Please enter a URL");
