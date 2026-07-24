@@ -148,14 +148,20 @@ export async function loadShorts(currentCode = null) {
                 ${short.clicks}
             </p>
 
-            <button class="cool-button" onclick="copyShort('${short.code}')">
+            <button class="cool-button copy-button">
                 <span>Copy</span>
             </button>
 
-            <button class="delete-button" onclick="deleteShort('${short.code}')">
+            <button class="delete-button delete-short-button">
                 <span>Delete</span>
             </button>
         `;
+
+        const copyButton = div.querySelector(".copy-button");
+        copyButton.addEventListener("click", () => copyShort(short.code));
+                    
+        const deleteButton = div.querySelector(".delete-short-button");
+        deleteButton.addEventListener("click", () => deleteShort(short.code));
 
         shortList.appendChild(div);
     });
