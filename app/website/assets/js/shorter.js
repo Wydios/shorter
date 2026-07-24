@@ -100,19 +100,22 @@ export async function loadShorts(currentCode = null) {
         `;
     };
 
-    const sortedShorts = data.shorts.sort((a, b) => {
-        return b.clicks - a.clicks;
-    });
+    const rankedShorts = [...data.shorts].sort((a, b) => b.clicks - a.clicks);
+    const ranks = new Map(rankedShorts.map((short, index) => [short.code, index]));
 
-    sortedShorts.forEach((short, index) => {
+    data.shorts.forEach((short) => {
         let rank = "";
 
-        if (index === 0) {
-            rank = "🥇";
-        } else if (index === 1) {
-            rank = "🥈";
-        } else if (index === 2) {
-            rank = "🥉";
+        switch (ranks.get(short.code)) {
+            case 0:
+                rank = "🥇";
+                break;
+            case 1:
+                rank = "🥈";
+                break;
+            case 2:
+                rank = "🥉";
+                break;
         }
 
         const isCurrent = short.code === currentCode;
